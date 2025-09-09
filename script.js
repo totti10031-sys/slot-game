@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let targetSymbolIndex;
                     // Probabilistic win: 20% chance
-                    const shouldWin = Math.random() < 0.2;
+                    const shouldWin = Math.random() < 0.4;
 
                     if (shouldWin) {
                         if (winningSymbol === null) winningSymbol = symbols[Math.floor(Math.random() * SYMBOL_COUNT)];
