@@ -1,139 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap');
+
 @keyframes spin-reel {
-    0% {
+    from {
+        transform: translateY(var(--initial-position));
+    }
+    to {
         transform: translateY(0);
     }
-    80% {
-        transform: translateY(var(--final-position));
-        animation-timing-function: cubic-bezier(0.3, 1, 0.6, 1); /* Ease out */
-    }
-    100% {
-        transform: translateY(var(--final-position));
-    }
 }
 
-@keyframes win-glow {
-    0% { box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); }
-    50% { box-shadow: 0 0 30px 10px rgba(255, 215, 0, 1); }
-    100% { box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); }
-}
-
-@keyframes screen-flash {
-    0%, 100% { background-color: transparent; }
-    50% { background-color: rgba(255, 255, 255, 0.8); }
+@keyframes hibiscus-glow {
+    0% { text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00, 0 0 20px #ff0000; color: #ffdd00; }
+    50% { text-shadow: 0 0 15px #ff8c00, 0 0 30px #ff0000, 0 0 40px #ff0000; color: #fff000; }
+    100% { text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00, 0 0 20px #ff0000; color: #ffdd00; }
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #c0c0c0; /* Light gray background */
-    margin: 0;
-}
-
-body.emoji-win-animation {
-    animation: screen-flash 0.15s infinite;
+    background-color: #f0e6d2; /* A light beige background */
 }
 
 #slot-machine-container {
-    padding: 20px;
-    background: linear-gradient(145deg, #f0e68c, #daa520); /* Khaki/Goldenrod gradient */
+    width: 600px;
+    background: linear-gradient(145deg, #fffacd, #f5deb3); /* LemonChiffon to BurlyWood */
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0,0,0,0.5);
-    border: 5px solid #8b4513; /* SaddleBrown border */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 0 15px rgba(0,0,0,0.3);
+    border: 5px solid #8b4513; /* SaddleBrown */
+    padding: 15px;
 }
 
-h1 {
+.top-panel h1 {
     text-align: center;
-    color: #8b0000; /* DarkRed */
-    text-shadow: 1px 1px 2px #fff;
+    color: #a52a2a; /* Brown */
+    font-size: 2em;
+    margin: 10px 0;
+}
+
+.main-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    border-radius: 10px;
+    padding: 20px 10px;
+    margin-bottom: 15px;
+}
+
+.hibiscus-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hibiscus {
+    font-size: 70px;
+    color: #333; /* Off state */
+    text-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.hibiscus.glowing {
+    animation: hibiscus-glow 1.5s infinite;
+}
+
+.slot-machine {
+    flex-shrink: 0;
 }
 
 .reel-container {
     display: flex;
-    margin-bottom: 20px;
-    background-color: #000;
-    padding: 15px 10px;
-    border-radius: 5px;
-    border: 3px solid #333;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
-}
-
-.reel-container.win-animation {
-    animation: win-glow 1s infinite;
 }
 
 .reel {
     width: 100px;
-    height: 100px; /* This is the viewing window */
+    height: 100px;
     margin: 0 5px;
-    background-color: #fff;
+    background-color: #222;
     border-radius: 10px;
-    overflow: hidden; /* Crucial for the rolling effect */
-    border: 2px solid #888;
+    overflow: hidden;
+    border: 2px solid #444;
 }
 
 .reel-strip {
-    transform: translateY(0); /* Initial position */
+    /* The transform is now set by the animation */
 }
 
 .reel-strip.spinning {
     animation-name: spin-reel;
     animation-duration: var(--spin-duration);
     animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5); /* Ease in */
+    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* Ease out */
 }
 
 .reel-item {
-    height: 100px; /* Must match .reel height */
+    height: 100px;
     line-height: 100px;
     text-align: center;
     font-size: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #fff;
 }
 
 .reel-item img {
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 50%; /* Make the image circular */
+    border-radius: 50%;
 }
 
-.controls {
+.bottom-panel {
     text-align: center;
+}
+
+#result {
+    font-size: 1.8em;
+    font-weight: bold;
+    height: 35px;
+    color: #d2691e; /* Chocolate */
     margin-bottom: 15px;
 }
 
 #spin-button {
     padding: 15px 40px;
     font-size: 24px;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
     cursor: pointer;
-    background: linear-gradient(145deg, #ff4141, #d11b1b);
+    background: linear-gradient(145deg, #e53935, #b71c1c);
     color: white;
-    border: 2px solid #8b0000;
+    border: 2px solid #800000;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    text-shadow: 0 0 5px #fff;
     transition: all 0.2s ease;
 }
 
 #spin-button:hover {
-    background: linear-gradient(145deg, #ff6363, #e62e2e);
+    background: linear-gradient(145deg, #ef5350, #c62828);
 }
 
 #spin-button:active {
     transform: translateY(2px);
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 32px;
-    font-weight: bold;
-    height: 40px;
-    text-align: center;
-    color: #8b0000;
 }
