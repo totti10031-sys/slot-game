@@ -3,28 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スロットゲーム</title>
+    <title>あたにスロット</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="slot-machine-container">
-        <h1>あたにスロット</h1>
-        <div class="slot-machine">
-            <div class="reel-container">
-                <div class="reel" id="reel1">
-                    <div class="reel-strip"></div>
-                </div>
-                <div class="reel" id="reel2">
-                    <div class="reel-strip"></div>
-                </div>
-                <div class="reel" id="reel3">
-                    <div class="reel-strip"></div>
+        <div class="top-panel">
+            <h1>あたにスロット</h1>
+        </div>
+        <div class="main-panel">
+            <div class="hibiscus-container left">
+                <div class="hibiscus">🌺</div>
+            </div>
+            <div class="slot-machine">
+                <div class="reel-container">
+                    <div class="reel" id="reel1">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <div class="reel" id="reel2">
+                        <div class="reel-strip"></div>
+                    </div>
+                    <div class="reel" id="reel3">
+                        <div class="reel-strip"></div>
+                    </div>
                 </div>
             </div>
+            <div class="hibiscus-container right">
+                <div class="hibiscus">🌺</div>
+            </div>
+        </div>
+        <div class="bottom-panel">
+            <div id="result"></div>
             <div class="controls">
                 <button id="spin-button">スピン</button>
             </div>
-            <div id="result"></div>
         </div>
     </div>
     <script src="script.js"></script>
