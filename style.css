@@ -1,14 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap');
 
-@keyframes spin-reel {
-    from {
-        transform: translateY(var(--initial-position));
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
+/* Keyframe animations are no longer used for spinning, only for the win glow */
 @keyframes hibiscus-glow {
     0% { text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00, 0 0 20px #ff0000; color: #ffdd00; }
     50% { text-shadow: 0 0 15px #ff8c00, 0 0 30px #ff0000, 0 0 40px #ff0000; color: #fff000; }
@@ -87,14 +79,8 @@ body {
 }
 
 .reel-strip {
-    /* The transform is now set by the animation */
-}
-
-.reel-strip.spinning {
-    animation-name: spin-reel;
-    animation-duration: var(--spin-duration);
-    animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); /* Ease out */
+    /* We now use transitions instead of animations */
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1); /* Default transition */
 }
 
 .reel-item {

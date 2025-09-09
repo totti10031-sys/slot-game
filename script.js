@@ -8,11 +8,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultDiv = document.getElementById('result');
     const hibiscusElements = document.querySelectorAll('.hibiscus');
 
-    const REEL_ITEM_HEIGHT = 100; // Must match .reel-item height in CSS
-    const SYMBOLS_PER_REEL = 30;
+    const REEL_ITEM_HEIGHT = 100;
+    const SYMBOL_COUNT = symbols.length;
+    const REPEATED_SETS = 5;
 
     let isSpinning = false;
-    let finalResults = [];
+    let finalSymbols = [];
+    let currentYOffsets = [0, 0, 0];
+
+    function preloadImages(urls, allImagesLoadedCallback) {
+        let loadedCounter = 0;
+        let toBeLoadedNumber = urls.length;
+        spinButton.textContent = '画像を読込中...';
+
+        urls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                loadedCounter++;
+                if (loadedCounter === toBeLoadedNumber) allImagesLoadedCallback();
+            };
+            img.onerror = () => {
+                console.error("Failed to load image:", url);
+                loadedCounter++;
+                if (loadedCounter === toBeLoadedNumber) allImagesLoadedCallback();
+            };
+        });
+    }
 
     function createSymbolElement(symbol) {
         const reelItem = document.createElement('div');
@@ -27,62 +49,77 @@ document.addEventListener('DOMContentLoaded', () => {
         return reelItem;
     }
 
-    reelStrips.forEach(strip => {
-        strip.innerHTML = '';
-        const fragment = document.createDocumentFragment();
-        for (let i = 0; i < SYMBOLS_PER_REEL; i++) {
-            const symbolIndex = Math.floor(Math.random() * symbols.length);
-            fragment.appendChild(createSymbolElement(symbols[symbolIndex]));
-        }
-        strip.appendChild(fragment);
-    });
+    function initializeGame() {
+        spinButton.disabled = false;
+        spinButton.textContent = 'スピン';
 
-    spinButton.addEventListener('click', () => {
-        if (isSpinning) return;
-        isSpinning = true;
-        resultDiv.textContent = '';
-        finalResults = [];
-        hibiscusElements.forEach(h => h.classList.remove('glowing'));
-
-        reelStrips.forEach((strip, index) => {
-            const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-            finalResults.push(randomSymbol);
-
-            // For reverse spin, put the target symbol at the top
-            const newFirstChild = createSymbolElement(randomSymbol);
-            strip.insertBefore(newFirstChild, strip.firstChild);
-
-            const totalHeight = strip.scrollHeight;
-            const initialPosition = -(totalHeight - REEL_ITEM_HEIGHT);
-
-            strip.style.setProperty('--initial-position', `${initialPosition}px`);
-            strip.style.setProperty('--spin-duration', `${2 + index * 0.5}s`);
-
-            strip.classList.remove('spinning');
-            void strip.offsetWidth;
-            strip.classList.add('spinning');
-        });
-    });
-
-    reelStrips[reelStrips.length - 1].addEventListener('animationend', () => {
-        isSpinning = false;
-        checkWin();
-
-        // Reset reel strips to original state to prevent them from growing infinitely
         reelStrips.forEach(strip => {
-            strip.removeChild(strip.firstChild);
-            strip.classList.remove('spinning');
-            strip.style.transform = `translateY(0)`;
+            for (let i = 0; i < REPEATED_SETS; i++) {
+                symbols.forEach(symbol => {
+                    strip.appendChild(createSymbolElement(symbol));
+                });
+            }
         });
-    });
 
-    function checkWin() {
-        const [r1, r2, r3] = finalResults;
-        if (r1 === r2 && r2 === r3) {
-            resultDiv.textContent = '🎉 大当たり! 🎉';
-            hibiscusElements.forEach(h => h.classList.add('glowing'));
-        } else {
-            resultDiv.textContent = '残念...';
+        spinButton.addEventListener('click', () => {
+            if (isSpinning) return;
+            isSpinning = true;
+            finalSymbols = [];
+            resultDiv.textContent = '';
+            hibiscusElements.forEach(h => h.classList.remove('glowing'));
+
+            let longestDuration = 0;
+
+            reelStrips.forEach((strip, index) => {
+                const targetSymbolIndex = Math.floor(Math.random() * SYMBOL_COUNT);
+                finalSymbols[index] = symbols[targetSymbolIndex];
+
+                const stripHeight = SYMBOL_COUNT * REEL_ITEM_HEIGHT;
+                // TEST: Make all reels have the same rotation distance
+                const rotations = 3;
+                const rotationDistance = rotations * stripHeight;
+                const targetPosition = targetSymbolIndex * REEL_ITEM_HEIGHT;
+                const newTargetY = currentYOffsets[index] - rotationDistance - targetPosition;
+
+                // TEST: Make all reels have the same duration
+                const spinDuration = 3;
+                longestDuration = Math.max(longestDuration, spinDuration);
+
+                strip.style.transition = `transform ${spinDuration}s cubic-bezier(0.33, 1, 0.68, 1)`;
+                strip.style.transform = `translateY(${newTargetY}px)`;
+                currentYOffsets[index] = newTargetY;
+            });
+
+            setTimeout(() => {
+                isSpinning = false;
+                checkWin();
+
+                reelStrips.forEach((s, i) => {
+                    const h = SYMBOL_COUNT * REEL_ITEM_HEIGHT;
+                    const eY = currentYOffsets[i] % h;
+                    s.style.transition = 'none';
+                    s.style.transform = `translateY(${eY}px)`;
+                    void s.offsetWidth;
+                    currentYOffsets[i] = eY;
+                });
+            }, longestDuration * 1000);
+        });
+
+        function checkWin() {
+            const [r1, r2, r3] = finalSymbols;
+            if (r1 && r1 === r2 && r2 === r3) {
+                resultDiv.textContent = '🎉 大当たり! 🎉';
+                hibiscusElements.forEach(h => h.classList.add('glowing'));
+            } else {
+                resultDiv.textContent = '残念...';
+            }
         }
+    }
+
+    const imageUrls = symbols.filter(s => s.startsWith('http'));
+    if (imageUrls.length > 0) {
+        preloadImages(imageUrls, initializeGame);
+    } else {
+        initializeGame();
     }
 });
