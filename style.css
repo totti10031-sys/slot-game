@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap');
 
-/* Keyframe animations are no longer used for spinning, only for the win glow */
 @keyframes hibiscus-glow {
     0% { text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00, 0 0 20px #ff0000; color: #ffdd00; }
     50% { text-shadow: 0 0 15px #ff8c00, 0 0 30px #ff0000, 0 0 40px #ff0000; color: #fff000; }
@@ -13,21 +12,21 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0e6d2; /* A light beige background */
+    background-color: #f0e6d2;
 }
 
 #slot-machine-container {
     width: 600px;
-    background: linear-gradient(145deg, #fffacd, #f5deb3); /* LemonChiffon to BurlyWood */
+    background: linear-gradient(145deg, #fffacd, #f5deb3);
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 0 15px rgba(0,0,0,0.3);
-    border: 5px solid #8b4513; /* SaddleBrown */
+    border: 5px solid #8b4513;
     padding: 15px;
 }
 
 .top-panel h1 {
     text-align: center;
-    color: #a52a2a; /* Brown */
+    color: #a52a2a;
     font-size: 2em;
     margin: 10px 0;
 }
@@ -51,7 +50,7 @@ body {
 
 .hibiscus {
     font-size: 70px;
-    color: #333; /* Off state */
+    color: #333;
     text-shadow: none;
     transition: all 0.3s ease;
 }
@@ -76,11 +75,13 @@ body {
     border-radius: 10px;
     overflow: hidden;
     border: 2px solid #444;
+    position: relative; /* Needed for JS positioning */
 }
 
 .reel-strip {
-    /* We now use transitions instead of animations */
-    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1); /* Default transition */
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .reel-item {
@@ -105,32 +106,42 @@ body {
     text-align: center;
 }
 
+.controls {
+    height: 50px; /* Set a fixed height to prevent layout shifts */
+}
+
+#start-button, .stop-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #888;
+}
+
+#start-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.stop-button {
+    background-color: #f44336; /* Red */
+    color: white;
+    margin: 0 5px;
+}
+
+.stop-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 #result {
+    margin-top: 20px;
     font-size: 1.8em;
     font-weight: bold;
     height: 35px;
     color: #d2691e; /* Chocolate */
-    margin-bottom: 15px;
 }
 
-#spin-button {
-    padding: 15px 40px;
-    font-size: 24px;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    cursor: pointer;
-    background: linear-gradient(145deg, #e53935, #b71c1c);
-    color: white;
-    border: 2px solid #800000;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s ease;
-}
-
-#spin-button:hover {
-    background: linear-gradient(145deg, #ef5350, #c62828);
-}
-
-#spin-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
+.hidden {
+    display: none;
 }
