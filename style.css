@@ -1,0 +1,139 @@
+@keyframes spin-reel {
+    0% {
+        transform: translateY(0);
+    }
+    80% {
+        transform: translateY(var(--final-position));
+        animation-timing-function: cubic-bezier(0.3, 1, 0.6, 1); /* Ease out */
+    }
+    100% {
+        transform: translateY(var(--final-position));
+    }
+}
+
+@keyframes win-glow {
+    0% { box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 30px 10px rgba(255, 215, 0, 1); }
+    100% { box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); }
+}
+
+@keyframes screen-flash {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(255, 255, 255, 0.8); }
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #c0c0c0; /* Light gray background */
+    margin: 0;
+}
+
+body.emoji-win-animation {
+    animation: screen-flash 0.15s infinite;
+}
+
+#slot-machine-container {
+    padding: 20px;
+    background: linear-gradient(145deg, #f0e68c, #daa520); /* Khaki/Goldenrod gradient */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0,0,0,0.5);
+    border: 5px solid #8b4513; /* SaddleBrown border */
+}
+
+h1 {
+    text-align: center;
+    color: #8b0000; /* DarkRed */
+    text-shadow: 1px 1px 2px #fff;
+}
+
+.reel-container {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #000;
+    padding: 15px 10px;
+    border-radius: 5px;
+    border: 3px solid #333;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+}
+
+.reel-container.win-animation {
+    animation: win-glow 1s infinite;
+}
+
+.reel {
+    width: 100px;
+    height: 100px; /* This is the viewing window */
+    margin: 0 5px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden; /* Crucial for the rolling effect */
+    border: 2px solid #888;
+}
+
+.reel-strip {
+    transform: translateY(0); /* Initial position */
+}
+
+.reel-strip.spinning {
+    animation-name: spin-reel;
+    animation-duration: var(--spin-duration);
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5); /* Ease in */
+}
+
+.reel-item {
+    height: 100px; /* Must match .reel height */
+    line-height: 100px;
+    text-align: center;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reel-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%; /* Make the image circular */
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#spin-button {
+    padding: 15px 40px;
+    font-size: 24px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #ff4141, #d11b1b);
+    color: white;
+    border: 2px solid #8b0000;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 5px #fff;
+    transition: all 0.2s ease;
+}
+
+#spin-button:hover {
+    background: linear-gradient(145deg, #ff6363, #e62e2e);
+}
+
+#spin-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    height: 40px;
+    text-align: center;
+    color: #8b0000;
+}
