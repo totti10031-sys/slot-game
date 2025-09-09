@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const imageUrl = 'https://ca.slack-edge.com/T03GLB4LV-U03NPQTHC-c5b87dcf6094-512';
     const newImageUrl = 'https://ca.slack-edge.com/T03GLB4LV-U74F6J70Q-a5b4f692ea38-512';
-    const symbols = ['🍒', '🍋', '🔔', '💎', '🍇', '🍉', imageUrl, newImageUrl];
+    const newImage1 = 'https://ca.slack-edge.com/T03GLB4LV-UGML4HJBY-7838396a8c69-512';
+    const newImage3 = 'https://ca.slack-edge.com/T03GLB4LV-U063ATELT5Y-a16f9e43bf03-512';
+    const newImage4 = 'https://ca.slack-edge.com/T03GLB4LV-UQ0BWAYBH-0a572039a796-512';
+    const newImage5 = 'https://ca.slack-edge.com/T03GLB4LV-U04J4C0HFL7-b9b59d60d3b9-512';
+    const image_99204 = 'https://ca.slack-edge.com/T03GLB4LV-U03Q4MS9M-c4bf09b99204-512'; // This is the one to keep
+
+    const symbols = [newImage1, newImage3, newImage4, imageUrl, newImageUrl, newImage5, image_99204];
 
     const reelStrips = document.querySelectorAll('.reel-strip');
     const startButton = document.getElementById('start-button');
@@ -44,18 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(gameLoop);
     }
 
-    function preloadImages(urls, callback) {
-        let loaded = 0;
-        startButton.textContent = '読込中...';
-        urls.forEach(url => {
-            const img = new Image();
-            img.src = url;
-            img.onload = img.onerror = () => {
-                loaded++;
-                if (loaded === urls.length) callback();
-            };
-        });
-    }
+    // Removed preloadImages function
 
     function createSymbolElement(symbol) {
         const reelItem = document.createElement('div');
@@ -130,9 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     reel.isSpinning = false; // CRITICAL FIX
 
                     let targetSymbolIndex;
-                    const isForcedWin = spinCount % 5 === 0;
+                    // Probabilistic win: 20% chance
+                    const shouldWin = Math.random() < 0.2;
 
-                    if (isForcedWin) {
+                    if (shouldWin) {
                         if (winningSymbol === null) winningSymbol = symbols[Math.floor(Math.random() * SYMBOL_COUNT)];
                         targetSymbolIndex = symbols.indexOf(winningSymbol);
                     } else {
@@ -190,10 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(step);
     }
 
-    const imageUrls = symbols.filter(s => s.startsWith('http'));
-    if (imageUrls.length > 0) {
-        preloadImages(imageUrls, initializeGame);
-    } else {
-        initializeGame();
-    }
+    // Direct call to initializeGame, no preloader
+    initializeGame();
 });
